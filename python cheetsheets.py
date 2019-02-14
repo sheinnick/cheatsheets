@@ -14,4 +14,19 @@ def walk(item, level=0, path=[]):
         print(f'|      {path_str}={str(item)}')
 
 #########################################################
+#код для дебагинга реквеста, спасибо https://github.com/madiedinro
+import logging
 
+try:
+    from http.client import HTTPConnection
+except ImportError:
+    from httplib import HTTPConnection
+HTTPConnection.debuglevel = 1
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
+
+#####
