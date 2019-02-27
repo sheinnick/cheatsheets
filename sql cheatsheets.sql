@@ -49,4 +49,11 @@ ROLLBACK	-- откатиться
 UPDATE Tble.Name
 SET [color] = [color] + N' светлый'
 -------------------------
+/* заменить подстроку в строковой колонке */
+BEGIN TRAN
+UPDATE Table.Name
+set [ColumnName] = REPLACE([ColumnName], N'substring to replace', N'new substring')
+WHERE [Id] IN (1340)
 
+--ROLLBACK
+COMMIT	
