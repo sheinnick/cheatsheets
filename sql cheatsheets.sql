@@ -60,3 +60,28 @@ WHERE [Id] IN (1340)
 
 --ROLLBACK
 COMMIT	
+
+------------------------------
+/* добавить колонки в таблицу + ключи*/
+ALTER TABLE [core].[Atoms] ADD
+    [Extension1]    INT NULL,
+    [Extension2]    INT NULL,
+    [Extension3]    INT NULL,
+    [Extension4]    INT NULL,
+    [Extension5]    INT NULL,
+    CONSTRAINT [FK_Atoms_AtomExtensions1] FOREIGN KEY ([Extension1]) REFERENCES [core].[AtomExtensions1] ([Id]),
+    CONSTRAINT [FK_Atoms_AtomExtensions2] FOREIGN KEY ([Extension2]) REFERENCES [core].[AtomExtensions2] ([Id]),
+    CONSTRAINT [FK_Atoms_AtomExtensions3] FOREIGN KEY ([Extension3]) REFERENCES [core].[AtomExtensions3] ([Id]),
+    CONSTRAINT [FK_Atoms_AtomExtensions4] FOREIGN KEY ([Extension4]) REFERENCES [core].[AtomExtensions4] ([Id]),
+    CONSTRAINT [FK_Atoms_AtomExtensions5] FOREIGN KEY ([Extension5]) REFERENCES [core].[AtomExtensions5] ([Id])
+GO
+
+-------------------------------
+/* update set нескольких значений, и с джойном */
+update u
+set
+u.assid = s.assid
+u.aaasss= s.ffdfd
+from ud u
+    inner join sale s on
+        u.id = s.udid
