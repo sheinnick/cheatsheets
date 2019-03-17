@@ -30,3 +30,9 @@ requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
 #####
+
+#Pandas
+#сразу много табличек в зависимости от того, что записано в графе TariffItem. Для этого в pandas есть метод groupby().
+
+groups = df.groupby('TariffItem')
+groups.get_group('Газ').head()
