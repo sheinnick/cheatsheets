@@ -85,3 +85,11 @@ u.aaasss= s.ffdfd
 from ud u
     inner join sale s on
         u.id = s.udid
+
+
+
+--------------
+/*добавить индес с +1 */
+ALTER TABLE crm.PhoneCalls ADD 
+    [Id] INT IDENTITY (1,1)
+GO
