@@ -87,3 +87,14 @@ display(HTML("<style>.container { width:90% !important; }</style>"))
 pd.set_option('max_colwidth', 800)
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
+#############################################
+
+
+#читаем файл в словарь, в файле каждая строка json
+import json
+
+users=dict()
+with open('100users.log') as f:
+    for line in f:
+        data=json.loads(line)
+        break
