@@ -29,10 +29,61 @@ requests_log = logging.getLogger("urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-#####
+#######################################
 
 #Pandas
 #сразу много табличек в зависимости от того, что записано в графе TariffItem. Для этого в pandas есть метод groupby().
 
 groups = df.groupby('TariffItem')
 groups.get_group('Газ').head()
+
+
+####################################
+
+#Запрос к странице и преобразование html в текст
+import requests
+import html2text
+s=requests.get('https://yandex.ru/search/?lr=213&text=test123')
+d=html2text.HTML2Text().handle(s.text)
+print(d)
+################################################
+
+
+#итеративный разбор json'a ищем вхождение по параметру
+#выводим то, где встречается address
+from urllib3.util import parse_url
+import json
+import requests
+
+params={
+    'query-string':'178.57.86.210',
+    #'flags':'no-filtering',
+    'source':'RIPE'
+}
+
+q=requests.get('https://rest.db.ripe.net/search.json',params).json()
+
+def iterate(items):
+    if isinstance(items,list):
+        for item in items:
+            iterate(item)
+    elif isinstance(items,dict):
+        for key,item in items.items():
+            iterate(item)
+            if item=='address':
+                print(items)
+iterate(q)
+#############################
+
+
+#сделать рабочую область ячеек пошире
+from IPython.core.display import display, HTML
+display(HTML("<style>.container { width:90% !important; }</style>"))
+
+##################################
+
+
+#меняем дефолтные настройки пандаса
+pd.set_option('max_colwidth', 800)
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
