@@ -1,13 +1,13 @@
 /*разница в днях можно использовать для джойнов*/
-DATEDIFF (DAY, C2.[DateTime], [client].[Contacts].[DateTime]) <= 180 --выбирает, где разница не больше 180
+-- DATEDIFF (DAY, C2.[DateTime], [client].[Contacts].[DateTime]) <= 180 --выбирает, где разница не больше 180
 
 
 /*выбрать все записи с одинаковым [ClientCartId], отсортировать по дате, пронумировать, результат вывести в колонку [RowNumber]*/
-ROW_NUMBER () OVER (PARTITION BY [ClientCartId] ORDER BY [DateTime]) AS [RowNumber]
+-- ROW_NUMBER () OVER (PARTITION BY [ClientCartId] ORDER BY [DateTime]) AS [RowNumber]
 
 
 /*преобразование типов даты*/
-CAST (CAST (Ct.[DateTime] AS DATE) AS DATETIME)
+-- CAST (CAST (Ct.[DateTime] AS DATE) AS DATETIME)
 -- — сначала в дейт, потом в дейттайм
 
 -------------------
@@ -76,6 +76,15 @@ ALTER TABLE [core].[Atoms] ADD
     CONSTRAINT [FK_Atoms_AtomExtensions5] FOREIGN KEY ([Extension5]) REFERENCES [core].[AtomExtensions5] ([Id])
 GO
 
+
+--------------
+/*добавить колонки*/
+ALTER TABLE crm.PhoneCalls ADD 
+    [Id] INT IDENTITY (1,1),  --индес +1
+    [TextColumn] [nvarchar](255) NULL -- текст до 255 символов
+GO
+
+
 -------------------------------
 /* update set нескольких значений, и с джойном */
 update u
@@ -87,9 +96,6 @@ from ud u
         u.id = s.udid
 
 
-
---------------
-/*добавить индес с +1 */
-ALTER TABLE crm.PhoneCalls ADD 
-    [Id] INT IDENTITY (1,1)
-GO
+--Убирать лишние пробелы
+UPDATE [client].[TableName]
+SET [Campaign] = TRIM([Campaign])
