@@ -99,3 +99,13 @@ from ud u
 --Убирать лишние пробелы
 UPDATE [client].[TableName]
 SET [Campaign] = TRIM([Campaign])
+
+
+--Удалить все строки в таблице
+TRUNCATE TABLE [core].[AnalyticsDataRaw]
+--или
+DELETE from [core].[AnalyticsDataRaw]
+
+-- Удалить строки в таблице, которые соответствуют условию
+DELETE from [core].[AnalyticsDataRaw]
+where [ProfileId] = 12
