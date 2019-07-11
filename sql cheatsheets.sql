@@ -109,3 +109,8 @@ DELETE from [core].[AnalyticsDataRaw]
 -- Удалить строки в таблице, которые соответствуют условию
 DELETE from [core].[AnalyticsDataRaw]
 where [ProfileId] = 12
+
+
+--сделать копию таблицы из имеющейся, если нужна полная копия то убираем кляузу where и всё что за ней
+SELECT * INTO client.TableCopy FROM client.TableSource WHERE client.TableSource.Id>=1
+
