@@ -7,7 +7,9 @@
 
 
 /*преобразование типов даты*/
--- CAST (CAST (Ct.[DateTime] AS DATE) AS DATETIME)
+select
+CAST(CAST (Ct.[DateTime] AS DATE) AS DATETIME)
+from Ttable.name as Ct
 -- — сначала в дейт, потом в дейттайм
 
 -------------------
@@ -54,7 +56,7 @@ SET [color] = [color] + N' светлый'
 
 /* заменить подстроку в строковой колонке */
 BEGIN TRAN
-UPDATE Table.Name
+UPDATE TTable.Name
 set [ColumnName] = REPLACE([ColumnName], N'substring to replace', N'new substring')
 WHERE [Id] IN (1340)
 
@@ -78,10 +80,10 @@ GO
 
 
 --------------
-/*добавить колонки*/
+/* добавить колонки */
 ALTER TABLE crm.PhoneCalls ADD 
-    [Id] INT IDENTITY (1,1),  --индес +1
-    [TextColumn] [nvarchar](255) NULL -- текст до 255 символов
+    [Id] INT IDENTITY (1,1),  /* индес +1 */
+    [TextColumn] [nvarchar](255) NULL /* текст до 255 символов */
 GO
 
 
@@ -89,28 +91,59 @@ GO
 /* update set нескольких значений, и с джойном */
 update u
 set
-u.assid = s.assid
-u.aaasss= s.ffdfd
+u.assid  = s.assid,
+u.aaasss = s.ffdfd
 from ud u
     inner join sale s on
         u.id = s.udid
 
 
---Убирать лишние пробелы
+/* Убирать лишние пробелы */
 UPDATE [client].[TableName]
 SET [Campaign] = TRIM([Campaign])
 
 
---Удалить все строки в таблице
+/* Удалить все строки в таблице */
 TRUNCATE TABLE [core].[AnalyticsDataRaw]
---или
+/* или  */
 DELETE from [core].[AnalyticsDataRaw]
 
--- Удалить строки в таблице, которые соответствуют условию
+/* Удалить строки в таблице, которыют условию */
 DELETE from [core].[AnalyticsDataRaw]
 where [ProfileId] = 12
 
 
---сделать копию таблицы из имеющейся, если нужна полная копия то убираем кляузу where и всё что за ней
+/* сделать копию таблицы из имеющейся, если нужна полная копия то убираем кляузу where и всё что за ней */
 SELECT * INTO client.TableCopy FROM client.TableSource WHERE client.TableSource.Id>=1
 
+
+/* переменные с датами */
+DECLARE     @endDate DATE = cast(getdate() as date)
+DECLARE     @startDate DATE = cast(DATEADD(day,-10,@endDate) AS date)
+
+
+/*
+T-SQL: Splitting a String into multiple columns
+https://social.technet.microsoft.com/wiki/contents/articles/26937.t-sql-splitting-a-string-into-multiple-columns.aspx
+*/
+
+/* спсиок всех таблиц */
+SELECT table_catalog [database], table_schema [schema], table_name  name, table_schema+N'.'+table_name schemaAndName, table_type type
+FROM INFORMATION_SCHEMA.TABLES
+where table_schema like '%crm%'
+
+/*список всех колонок */
+SELECT table_schema+ N'.' +TABLE_NAME AS [Имя таблицы],
+        COLUMN_NAME AS [Имя столбца],
+        DATA_TYPE AS [Тип данных столбца],
+        IS_NULLABLE AS [Значения NULL]
+FROM INFORMATION_SCHEMA.COLUMNS
+where COLUMN_NAME like N'%carbrand%'
+
+
+/*сгруппировать что-то в понедельник, первое число */
+SELECT
+DATEFROMPARTS(YEAR(cef.DateTime),MONTH(cef.DateTime),1) AS [First date of month],
+CAST(DATEADD(DAY,2-1*iif(DATEPART(WEEKDAY, cef.DateTime)!=1,DATEPART(WEEKDAY, cef.DateTime),8) ,cef.DateTime) AS date) AS [First date of week]
+from core.cellsEndsFriday cef
+    
