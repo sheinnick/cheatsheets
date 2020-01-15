@@ -98,3 +98,27 @@ with open('100users.log') as f:
     for line in f:
         data=json.loads(line)
         break
+##############################################
+
+#Разобрать текст на слова, посчитать количество
+from collections import Counter
+import re
+
+path = ''
+filename = 'file.txt'
+
+#
+words = re.findall(r'\w+', open(path+filename).read().lower())
+bag_of_words= Counter(words)
+#
+bag_of_words.most_common()
+##############################################
+
+
+#функция сортировки словаря по значениям (спасибо https://t.me/kulichevskiy)
+
+def sorted_dict(d):   
+    return {k: v for k, v in sorted(d.items(), key=lambda item: item[1], reverse=True)}
+#################################################
+
+
