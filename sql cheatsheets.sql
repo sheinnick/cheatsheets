@@ -118,9 +118,14 @@ SELECT * INTO client.TableCopy FROM client.TableSource WHERE client.TableSource.
 
 
 /* переменные с датами */
-DECLARE     @endDate DATE = cast(getdate() as date)
-DECLARE     @startDate DATE = cast(DATEADD(day,-10,@endDate) AS date)
+DECLARE     @DateEnd    DATE = cast(getdate() as date)
+DECLARE     @DateStart  DATE = cast(DATEADD(day,-10,@DateEnd) AS date)
 
+DECLARE     @DateStart  DATE    = '2020-03-01'
+DECLARE     @DateEnd    DATE    = '2020-04-10'
+
+DECLARE     @endDatePlusOneDay  DATE
+SELECT      @endDatePlusOneDay  = DATEADD(DAY, 1, @DateEnd)
 
 /*
 T-SQL: Splitting a String into multiple columns
@@ -131,6 +136,16 @@ https://social.technet.microsoft.com/wiki/contents/articles/26937.t-sql-splittin
 SELECT table_catalog [database], table_schema [schema], table_name  name, table_schema+N'.'+table_name schemaAndName, table_type type
 FROM INFORMATION_SCHEMA.TABLES
 where table_schema like '%crm%'
+
+/* спсиок всех таблиц и в последней колонке делаем код для показа 1000 записей упорядоченных по 1 колонке*/
+SELECT table_catalog [database]
+	,table_schema [schema]
+	,table_name name
+	,table_schema + N'.' + table_name schemaAndName
+	,table_type type
+	,N'select top 1000 * from ' + table_schema + N'.' + table_name + N' order by 1 desc' as [select]
+FROM INFORMATION_SCHEMA.TABLES
+WHERE table_schema LIKE '%crm%'
 
 /*список всех колонок */
 SELECT table_schema+ N'.' +TABLE_NAME AS [Имя таблицы],
@@ -146,4 +161,41 @@ SELECT
 DATEFROMPARTS(YEAR(cef.DateTime),MONTH(cef.DateTime),1) AS [First date of month],
 CAST(DATEADD(DAY,2-1*iif(DATEPART(WEEKDAY, cef.DateTime)!=1,DATEPART(WEEKDAY, cef.DateTime),8) ,cef.DateTime) AS date) AS [First date of week]
 from core.cellsEndsFriday cef
-    
+
+
+/* достать значение из JSON'a */
+SELECT  JSON_VALUE(ctn.[Json], '$.visitor_first_campaign_name') as [visitor_first_campaign_name]
+FROM    core.TableName ctn
+
+
+
+/* первичный ключ id */
+CREATE TABLE [core].[Blablabla]
+    [Id] INT IDENTITY(1, 1) NOT NULL,
+-- блаблабла
+    CONSTRAINT [PK_Blablabla] PRIMARY KEY ([Id])
+GO
+
+
+/* индексы */ -- /* оценить фрагментацию индексов таблицы */
+SELECT a.object_id, object_name(a.object_id) AS TableName,
+    a.index_id, name AS IndedxName, avg_fragmentation_in_percent
+FROM sys.dm_db_index_physical_stats
+    (DB_ID (N'DB_NAME')							-- insert your database name
+        , OBJECT_ID(N'schema_name.table_name')	-- insert your table name
+        , NULL
+        , NULL
+        , NULL) AS a
+INNER JOIN sys.indexes AS b
+    ON a.object_id = b.object_id
+    AND a.index_id = b.index_id;
+GO
+
+/* индексы */ -- /* перестроить индексы таблицы */
+ALTER INDEX ALL ON schema.table			REBUILD WITH (ONLINE = ON)
+
+/* created */
+ALTER TABLE [schema].[table] ADD
+Created datetime null
+
+ALTER TABLE [schema].[table] ADD  DEFAULT (getdate()) FOR [Created]
