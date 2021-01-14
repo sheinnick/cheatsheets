@@ -122,3 +122,23 @@ def sorted_dict(d):
 #################################################
 
 
+
+######################
+# определяем размер оперативки у переменной
+
+from pympler import asizeof
+
+
+def humanize_bytes(num, suffix='B'):
+    """Форматирует размер в байтах в человекочитаемый вид"""
+    for unit in ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z']:
+        if abs(num) < 1024.0:
+            return "%3.1f%s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f%s%s" % (num, 'Yi', suffix)
+
+dict_ = {
+    'test':'test',
+}
+
+humanize_bytes(asizeof.asizeof(dict_))
