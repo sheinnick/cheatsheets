@@ -199,3 +199,10 @@ ALTER TABLE [schema].[table] ADD
 Created datetime null
 
 ALTER TABLE [schema].[table] ADD  DEFAULT (getdate()) FOR [Created]
+
+
+/* views in big query */
+SELECT
+ * EXCEPT(check_option)
+FROM
+ `base.dataset.INFORMATION_SCHEMA.VIEWS`
