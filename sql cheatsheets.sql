@@ -225,3 +225,6 @@ SELECT table_id,
     dataset_id,
     project_id
 FROM `base.dataset.__TABLES__`
+
+/* postgres json */
+json_object_keys(to_json(metadata)) -- convert text to json obg extract keys
