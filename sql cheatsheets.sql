@@ -231,7 +231,7 @@ json_object_keys(to_json(metadata)) -- convert text to json obg extract keys
  
  
  
- /* BQ extract field names from structs
+ /* BQ extract field names from structs */
  
 	 with splitted as (
 	  SELECT
