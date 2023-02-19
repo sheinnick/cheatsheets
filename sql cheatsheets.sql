@@ -228,3 +228,43 @@ FROM `base.dataset.__TABLES__`
 
 /* postgres json */
 json_object_keys(to_json(metadata)) -- convert text to json obg extract keys
+ 
+ 
+ 
+ /* BQ extract field names from structs
+ 
+	 with splitted as (
+	  SELECT
+	    split(
+	      substr(
+		s.data_type
+		,length("STRUCT<")+1
+		,length(s.data_type)-length("STRUCT<")-1)
+	      ,", "
+	    )             as struct_fields
+	    ,table_name   as table_name
+	    ,column_name  as column_name
+	  FROM `project-id.chema_name.INFORMATION_SCHEMA.COLUMNS` as s
+	  where 1=1
+	    and s.data_type like 'STRUCT%'
+	    -- and table_name like '%words%'
+	)
+
+	,fields_from_structs as (
+	  select
+	     table_name                         as table_name
+	    ,column_name                        as column_name
+	    ,struct_field                       as struct_field
+	    ,split(struct_field,' ')[offset(0)] as struct_field_name
+	    ,split(struct_field,' ')[offset(1)] as struct_field_type
+	  from splitted, unnest(struct_fields) as struct_field
+	  order by 1,2,3
+	)
+
+	select
+	  *
+	from fields_from_structs
+
+
+
+
