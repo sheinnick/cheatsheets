@@ -204,3 +204,16 @@ ALTER TABLE [schema].[table] ADD  DEFAULT (getdate()) FOR [Created]
 
 /* postgres generate rundom from set */
 ('{Good,Better,Best}'::text[])[ceil(random()*3)]
+
+
+/* postgres list of primary keys for tables */
+select
+   kcu.table_schema 
+  ,kcu.table_catalog  
+  ,kcu.table_name 
+  ,json_agg(kcu.column_name order by kcu.column_name )
+from 	information_schema.key_column_usage as kcu
+where 1=1
+  and constraint_name like '%_pkey'     
+group by 1,2,3
+order by 1,2,3
