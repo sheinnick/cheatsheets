@@ -1,4 +1,10 @@
 # Jira — copy to clipboard issue's data (title,url)  
+bookmarklets for one-click copying issue's data  
+```
+JP-321 to do the greatest thing ever !%& ||| https://yourdomain.atlassian.net/browse/JP-321
+JP-321 to do the greatest thing ever !%&
+JP-321_to_do_the_greatest_thing_ever____
+```  
   
 ## {key} {title} ||| {url}  
 copy to clipboard string:  
